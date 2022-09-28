@@ -7,7 +7,7 @@ from twilio.rest import Client
 from configparser import ConfigParser
 
 # Define ConfigParser values
-file = 'secretstuff/config.ini'
+file = 'config.ini'
 config = ConfigParser()
 config.read(file)
 
@@ -30,15 +30,18 @@ processorUnit = "12700K"
 monitor = "1440p"
 
 def monitorComments(client, gpu, cpu, monitor, sub):
+    partList = [gpu, cpu, monitor]
     while True:
         for submission in sub.stream.submissions(skip_existing=True):
-            if gpu in submission.title or cpu in submission.title or monitor in submission.title:
-                timestamp = submission.created_utc
-                postTime = datetime.datetime.fromtimestamp(timestamp)
-                postTitle = submission.title
-                postLink = ("https://www.reddit.com" + submission.permalink)
-                postUrl = (submission.url)
-                sendMessage(client, postTime, postTitle, postLink, postUrl)
+            title = submission.title
+            for part in partList:
+                if part in title:
+                    timestamp = submission.created_utc
+                    postTime = datetime.datetime.fromtimestamp(timestamp)
+                    postTitle = title
+                    postLink = ("https://www.reddit.com" + submission.permalink)
+                    postUrl = (submission.url)
+                    sendMessage(client, postTime, postTitle, postLink, postUrl)
 
 def sendMessage(client, postTime, postTitle, postLink, postUrl):
     messageBody = [postTime, postTitle, postLink, postUrl]

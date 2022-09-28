@@ -130,5 +130,7 @@ dmypy.json
 
 # Project Specific
 secretstuff/
+config.ini
 testing.py
 twilio.env
+bfg*
