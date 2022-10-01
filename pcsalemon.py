@@ -55,8 +55,8 @@ def sendMessage(client, postTime, postTitle, postLink, postUrl):
 
 {}
 """).format(messageBody[0], messageBody[1], messageBody[2], messageBody[3]),
-            from_= ['twilio']['phoneNumber'],
-            to=['client']['phoneNumber']
+            from_= config['twilio']['phoneNumber'],
+            to = config['client']['phoneNumber']
         ) 
 
 try:
