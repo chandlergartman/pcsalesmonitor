@@ -1,5 +1,4 @@
 #!/bin/env python3
-
 import praw
 import datetime
 import os
@@ -31,11 +30,14 @@ monitor = "1440p"
 
 def monitorComments(client, gpu, cpu, monitor, sub):
     partList = [gpu, cpu, monitor]
+    # Infinite loop to keep bot running, might be redundant
     while True:
+        # This for loop may already run infinitely
         for submission in sub.stream.submissions(skip_existing=True):
             title = submission.title
             for part in partList:
                 if part in title:
+                    # Gather post content for message
                     timestamp = submission.created_utc
                     postTime = datetime.datetime.fromtimestamp(timestamp)
                     postTitle = title
@@ -44,8 +46,9 @@ def monitorComments(client, gpu, cpu, monitor, sub):
                     sendMessage(client, postTime, postTitle, postLink, postUrl)
 
 def sendMessage(client, postTime, postTitle, postLink, postUrl):
+    # Gather post content into list, probably can just do this in the monitorComments function when the variables are set
     messageBody = [postTime, postTitle, postLink, postUrl]
-
+    # Formats and sends the message
     message = client.messages.create(
             body = (""" 
 {}
@@ -58,8 +61,12 @@ def sendMessage(client, postTime, postTitle, postLink, postUrl):
             from_= config['twilio']['phoneNumber'],
             to = config['client']['phoneNumber']
         ) 
+    # Append message details to log file
+    with open('log.txt', 'a') as f:
+        f.write(message + '\n')
 
 try:
+    # Runs entire program
     monitorComments(client, graphicsCard, processorUnit, monitor, subreddit)     
 
 except KeyboardInterrupt:
