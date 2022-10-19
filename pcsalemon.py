@@ -28,12 +28,12 @@ graphicsCard = "3080"
 processorUnit = "12700K"
 monitor = "1440p"
 
-def monitorComments(client, gpu, cpu, monitor, sub):
-    partList = [gpu, cpu, monitor]
+def monitorComments(client, sub):
     # Infinite loop to keep bot running, might be redundant
     while True:
         # This for loop may already run infinitely
-        for submission in sub.stream.submissions(skip_existing=True):
+        for submission in sub.stream.submissions(skip_existing=True): 
+            partList = [config['client']['cpu'],config['client']['cpu2'],config['client']['gpu'],config['client']['gpu2']]
             title = submission.title
             for part in partList:
                 if part in title:
@@ -61,13 +61,13 @@ def sendMessage(client, postTime, postTitle, postLink, postUrl):
             from_= config['twilio']['phoneNumber'],
             to = config['client']['phoneNumber']
         ) 
-    # Append message details to log file
+    # Append message details to log file (brokededed, log.txt is empty)
     with open('log.txt', 'a') as f:
         f.write(message + '\n')
 
 try:
     # Runs entire program
-    monitorComments(client, graphicsCard, processorUnit, monitor, subreddit)     
+    monitorComments(client, subreddit)     
 
 except KeyboardInterrupt:
     print("Ended")
