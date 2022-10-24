@@ -63,7 +63,8 @@ def sendMessage(client, postTime, postTitle, postLink, postUrl):
         ) 
     # Append message details to log file (brokededed, log.txt is empty)
     with open('log.txt', 'a') as f:
-        f.write(message + '\n')
+        f.write(message)
+        f.write('\n')
 
 try:
     # Runs entire program
